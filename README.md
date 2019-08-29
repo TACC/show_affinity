@@ -1,9 +1,9 @@
 show_affinity is a tool to show the core binding affinity of running processes/threads of current user. 
 
-To compile,\<br> 
+To compile,<br> 
 	gcc -O2 -o show_affinity show_affinity.c 
 
-To run the command, \<br>
+To run the command, <br>
 	./show_affinity [all]
 
 Without any parameter, show_affinity will only show the results of processes/threads of current user that keep cpu busy.
