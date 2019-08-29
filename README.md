@@ -9,4 +9,7 @@ To run the command, <br>
 Without any parameter, show_affinity will only show the results of processes/threads of current user that keep cpu busy.
 
 With "all" as a parameter, show_affinity show the results of all processes/threads of current user. 
+<br>
+Example output, 
+![](https://github.com/TACC/show_affinity/blob/master/stampede.jpg)
 
