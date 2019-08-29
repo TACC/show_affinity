@@ -1,4 +1,6 @@
+# Lmod
 show_affinity is a tool to show the core binding affinity of running processes/threads of current user. 
+
 
 To compile,<br> 
 `gcc -O2 -o show_affinity show_affinity.c`
