@@ -10,6 +10,6 @@ Without any parameter, show_affinity will only show the results of processes/thr
 
 With "all" as a parameter, show_affinity show the results of all processes/threads of current user. 
 <br>
-Example output, 
-![](https://github.com/TACC/show_affinity/blob/master/stampede.jpg)
+Example output, <br>
+![](https://github.com/TACC/show_affinity/blob/master/affinity.png)
 
