@@ -4,8 +4,8 @@
 --------------------------------------------------------------------------
 --
 --  show_affinity is licensed under the terms of the MIT license reproduced
---  below. This means that Lmod is free software and can be used for both
---  academic and commercial purposes at absolutely no cost.
+--  below. This means that show_affinity is free software and can be used 
+--  for both academic and commercial purposes at absolutely no cost.
 --
 --  ----------------------------------------------------------------------
 --
