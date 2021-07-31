@@ -42,19 +42,18 @@ one might observe performance issue due to improper binding.
 
 To compile,
 gcc -Wall -o show_affinity show_affinity.c
-
+  
 To run the command, 
 ./show_affinity [all]
-
+	
 Without any parameter, show_affinity will only show the results of the processes/
 threads of current user that keep cpu busy. With "all" as a parameter, show_affinity 
 show the results of all processes/threads of current user.
-
+	  
 You can run show_affinity with watch if you want to constantly monitor the binding 
 affinities of running processes. 
-
+		
 Example: watch -n 2 show_affinity all
-
 */
 
 #include <stdio.h>
@@ -92,20 +91,20 @@ static int bShow_All = 0; // A flag for showing the results for all running proc
 
 int main(int argc, char *argv[])	{
 	bShow_All = 0;
-
-	if (argc == 2)	{
+	
+	if ( argc == 2 )	{
 		if ( ( strncmp( argv[1], "all", 4) == 0 ) || (( strncmp(argv[1], "ALL", 4) == 0 )) )	{
 			bShow_All = 1;
 		}
 	}
-
+	
 	my_pid = getpid();
 	my_uid = getuid();
-//	gethostname(szHostName, 255);
-
+	//	gethostname(szHostName, 255);
+	
 	nCores = Determine_Number_of_Cores();	// Get the number of logical cores. 
 	Enumerate_All_Processes();				// Enumerate allprocesses and print binding affinities. 
-
+	
 	return 0;
 }
 
@@ -119,7 +118,7 @@ void Enumerate_All_Processes(void)	{
 	struct stat file_stat;
 	int pid, tid, thread_count;
 	int IsThreadRunning, bMainThread;
-
+	
 	printf("pid     Exe_Name             tid     Affinity\n");
 	
 	pDirRoot = opendir("/proc");	// the root dir of all running processes
@@ -150,20 +149,20 @@ void Enumerate_All_Processes(void)	{
 							break;
 						}
 						if ( (pThreadEntry->d_name[0] < '0') || (pThreadEntry->d_name[0] > '9') )	continue;	// not starting with a number
-
+						
 						if ( thread_count == 0 )	{	// Need to query executable file name for the main thread of each process
 							Extract_Exec_Name( pid, szExeName, sizeof(szExeName) );
 							if (szExeName[0] == 0 )	{	// not a valid name
 								continue;
 							}
-
+							
 							snprintf( szMsg, sizeof(szMsg), "%-6d  %-15s     ", pid, szExeName );
 						}						
-
+						
 						tid = atoi( pThreadEntry->d_name );
 						snprintf( szPathChild, sizeof(szPathChild), "/proc/%s/stat", pThreadEntry->d_name );
 						IsThreadRunning = Is_Thread_Running( szPathChild );
-
+						
 						if ( bShow_All )	{
 							Query_Task_CPUSet( tid, &bMainThread, szMsg );
 						}
@@ -188,19 +187,19 @@ void Enumerate_All_Processes(void)	{
 /*
 Query_Task_CPUSet() queries and prints the binding affinity for a given thread. 
 Input parameters:
-     tid - the thread id we need to query binding affinity.
-     bMainThread - the flag whether current thread is the main thread of current process or not.
-     szMsg - This buffer contains the thread id (of main thread) and executable file name.  
+	tid - the thread id we need to query binding affinity.
+	bMainThread - the flag whether current thread is the main thread of current process or not.
+	szMsg - This buffer contains the thread id (of main thread) and executable file name.  
 Output parameters:
-     bMainThread - *bMainThread == 1 means current thread is the main thread of a process. *bMainThread = 0 if (*bMainThread == 1). 
+	bMainThread - *bMainThread == 1 means current thread is the main thread of a process. *bMainThread = 0 if (*bMainThread == 1). 
 */
 
 void Query_Task_CPUSet( const int tid, int *bMainThread, const char szMsg[] )	{
 	char szBuff_Affinity[LEN_AFFINITY_BUFF];
 	cpu_set_t my_set;
-
+	
 	CPU_ZERO( &my_set );
-
+	
 	if ( sched_getaffinity( tid, sizeof(my_set), &my_set ) == -1 )	{
 		printf( "Failed to get tid %d's affinity. Error no. is %x\nQuit\n", tid, errno );
 		exit( 1 );
@@ -216,9 +215,9 @@ void Query_Task_CPUSet( const int tid, int *bMainThread, const char szMsg[] )	{
 /*
 Is_Thread_Running() Query whether a thread is running or not with file "/proc/%tid/stat". 
 Input parameters:
-     szName - The full path of "/proc/%tid/stat". 
- Returned parameter:
-     0 - not running; 1 - running
+	szName - The full path of "/proc/%tid/stat". 
+Returned parameter:
+	0 - not running; 1 - running
 */
 
 int Is_Thread_Running(const char szName[])	{
@@ -239,7 +238,7 @@ int Is_Thread_Running(const char szName[])	{
 	if( nItemsRead != 4 )	{
 		printf( "Warning: Unexpected content. %s\nnItemsRead = %d\n", szBuff, nItemsRead );
 	}
-
+	
 	if( RunningStatus[0] == 'R' )	return 1;
 	else	return 0;
 }
@@ -247,12 +246,12 @@ int Is_Thread_Running(const char szName[])	{
 /*
 cpulist_create() generates a human readable string from an array of bits of cpu binding affinity. 
 Input parameters:
-     str - The buffer to hold the human readable string. 
-     len - The max length of str[].
-	 set - cpu masks from sched_getaffinity(). 
-	 setsize - the number of bytes set occupies. 
+	str - The buffer to hold the human readable string. 
+	len - The max length of str[].
+	set - cpu masks from sched_getaffinity(). 
+	setsize - the number of bytes set occupies. 
 Returned parameter:
-     str - The buffer to hold the human readable string. 
+	str - The buffer to hold the human readable string. 
 */
 
 char *cpulist_create(char *str, const size_t len, const cpu_set_t *set, const size_t setsize)	{
@@ -260,7 +259,7 @@ char *cpulist_create(char *str, const size_t len, const cpu_set_t *set, const si
 	size_t MaxLenSet = 8 * (setsize);	// Each byte has 8 bits. 
 	char *ptr = str;
 	int EntryMade = 0;
-
+	
 	for ( i = 0; i < MaxLenSet; i++ ) {
 		if ( CPU_ISSET_S(i, setsize, set) ) {
 			BlockSize = 0;
@@ -285,29 +284,31 @@ char *cpulist_create(char *str, const size_t len, const cpu_set_t *set, const si
 				printf( "Error: str[] is not long enough to hold binding affinity info.\n" );
 				return NULL;
 			}
-
+			
 			ptr += nBytesWritten;
 			nBytesLeft -= nBytesWritten;
 		}
 	}
 	ptr -= EntryMade;
 	*ptr = '\0';
-
+	
 	return str;
 }
 
 #define MIN_LEN_PER_LINE	(24)	// minimal length per line in file /proc/stat
 
-// Determine_Number_of_Cores() determines how many logical cores on current computer from file /proc/stat. 
-// Return value:
-//     The number of logical cores.  
+/*
+Determine_Number_of_Cores() determines how many logical cores on current computer from file /proc/stat. 
+Return value:
+	The number of logical cores.  
+*/
 
 int Determine_Number_of_Cores(void)	{
 	FILE *fIn;
 	char szBuff[BUFF_SIZE];
 	size_t nBytesRead;
 	int iPos, nCoreLocal;
-
+	
 	fIn = fopen( "/proc/stat", "r" );
 	if ( fIn == NULL )	{
 		printf("Fatal error: Fail to open file /proc/stat.\n");
@@ -316,21 +317,21 @@ int Determine_Number_of_Cores(void)	{
 	
 	nBytesRead = fread( szBuff, 1, BUFF_SIZE, fIn );
 	fclose( fIn );
-/*
-Example head of /proc/stat, 
-
-cpu  334573387 201030304 287161779 119936862297 143550565 0 8066790 0 0 0
-cpu0 11810689 13567949 5778954 2122299612 3007485 0 1259027 0 0 0
-cpu1 15361040 30313968 6503408 2103388061 1671157 0 200641 0 0 0
-...
-*/
+	/*
+	Example head of /proc/stat, 
+	
+	  cpu  334573387 201030304 287161779 119936862297 143550565 0 8066790 0 0 0
+	  cpu0 11810689 13567949 5778954 2122299612 3007485 0 1259027 0 0 0
+	  cpu1 15361040 30313968 6503408 2103388061 1671157 0 200641 0 0 0
+	  ...
+	*/
 	iPos = Get_Offset_of_Next_Line( szBuff, MIN_LEN_PER_LINE, nBytesRead );	// find the position of the second line
 	
 	nCoreLocal = 0;
 	while ( iPos >= 0 )	{
 		if( strncmp( szBuff+iPos, "cpu", 3 ) == 0 )	{
 			nCoreLocal++;
-
+			
 			if(nCoreLocal > MAX_CORE)	{
 				printf( "nCores > MAX_CORE\n" );
 				exit( 1 );
@@ -341,24 +342,26 @@ cpu1 15361040 30313968 6503408 2103388061 1671157 0 200641 0 0 0
 		}
 		iPos = Get_Offset_of_Next_Line( szBuff, iPos + MIN_LEN_PER_LINE, nBytesRead );	// find the next line
 	}
-
-//	printf("There are %d cores on %s\n", nCoreLocal, szHostName);
-
+	
+	//	printf("There are %d cores on %s\n", nCoreLocal, szHostName);
+	
 	return nCoreLocal;
 }
 #undef MIN_LEN_PER_LINE
 
-// Get_Offset_of_Next_Line() determines where the next new line starts in a given buffer. 
-// Input parameters:
-//     szBuff - The buffer to check
-//     iPosStart - Starting offset
-//     nBuffSize - The total length of the buffer
-// Return value:
-//     If positive, the offset of the next new line. (-1) means no new line is found. 
+/*
+Get_Offset_of_Next_Line() determines where the next new line starts in a given buffer. 
+Input parameters:
+	szBuff - The buffer to check
+	iPosStart - Starting offset
+	nBuffSize - The total length of the buffer
+Return value:
+	If positive, the offset of the next new line. (-1) means no new line is found. 
+*/
 
 int Get_Offset_of_Next_Line(const char szBuff[], const int iPosStart, const int nBuffSize)	{
 	int i=iPosStart;
-
+	
 	while ( i < nBuffSize )	{
 		if ( szBuff[i] == 0xA )	{	// A new line
 			return (i+1);	// pointing to the beginning of next line
@@ -370,12 +373,14 @@ int Get_Offset_of_Next_Line(const char szBuff[], const int iPosStart, const int 
 	return (-1);
 }
 
-// Extract_Exec_Name() extracts the executable file name for a given process from "/proc/%pid/stat". 
-// Input parameters:
-//     pid - the process id. 
-//     nMaxStrLen - The maximum allowed length of buffer szExeName.
-// Output parameter:
-//     szExeName[] - The buffer that holds the executable file name.  
+/*
+Extract_Exec_Name() extracts the executable file name for a given process from "/proc/%pid/stat". 
+Input parameters:
+	pid - the process id. 
+	nMaxStrLen - The maximum allowed length of buffer szExeName.
+Output parameter:
+	szExeName[] - The buffer that holds the executable file name.  
+*/
 
 void Extract_Exec_Name(const int pid, char szExeName[], const int nMaxStrLen)	{
 	char szPath[512];
@@ -384,16 +389,16 @@ void Extract_Exec_Name(const int pid, char szExeName[], const int nMaxStrLen)	{
 	FILE *fIn=NULL;
 	
 	szExeName[0] = 0;
-
+	
 	snprintf( szPath, sizeof(szPath), "/proc/%d/stat", pid );
 	fIn = fopen( szPath, "r" );
 	if( fIn == NULL )	return;
-
+	
 	nBytesRead = fread( szBuff, 1, nMaxStrLen, fIn );
 	fclose( fIn );
-
+	
 	// Example of szBuff, "120097 (sshd) "
-
+	
 	i = 0;
 	while ( i < nBytesRead )	{
 		if( szBuff[i] == '(' )	{	// starting with '('
@@ -402,7 +407,7 @@ void Extract_Exec_Name(const int pid, char szExeName[], const int nMaxStrLen)	{
 		i++;
 	}
 	if( i >= nBytesRead )	return;
-
+	
 	i++;
 	while( i < nBytesRead )	{
 		if( szBuff[i] == ')' )	{	// ending with ')'
