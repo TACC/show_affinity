@@ -1,9 +1,9 @@
 # show_affinity
-show_affinity is a tool to show the core binding affinity of running processes/threads of current user. 
+show_affinity is a tool under Linux to show the core binding affinity of running processes/threads of current user. 
 
 
 To compile,<br> 
-`gcc -O2 -o show_affinity show_affinity.c`
+`gcc -Wall -o show_affinity show_affinity.c`
 
 To run the command, <br>
 `./show_affinity [all]`
