@@ -69,7 +69,7 @@ Example: watch -n 2 show_affinity all
 #include <sched.h>
 #include <errno.h>
 
-#define MAX_CORE			(2048)	// The maximum number of cores on current computer.
+#define MAX_CORE		(2048)	// The maximum number of cores on current computer.
 #define LEN_AFFINITY_BUFF	(MAX_CORE*64)	// The maximum length of the buffer to hold affinity information
 #define BUFF_SIZE	(MAX_CORE * 256)	// 256 bytes should be more than enough for one line record. BUFF_SIZE defines the size of the buffer for thread binding affinity info 
 #define SIZE_STAT			(256)	// The number of bytes we read from "/proc/%tid/stat"
@@ -216,7 +216,7 @@ void Query_Task_CPUSet( const int tid, int *bMainThread, const char szMsg[] )	{
 Is_Thread_Running() Query whether a thread is running or not with file "/proc/%tid/stat". 
 Input parameters:
 	szName - The full path of "/proc/%tid/stat". 
-Returned parameter:
+Return value:
 	0 - not running; 1 - running
 */
 
@@ -250,7 +250,7 @@ Input parameters:
 	len - The max length of str[].
 	set - cpu masks from sched_getaffinity(). 
 	setsize - the number of bytes set occupies. 
-Returned parameter:
+Return value:
 	str - The buffer to hold the human readable string. 
 */
 
