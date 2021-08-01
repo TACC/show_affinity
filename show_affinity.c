@@ -72,7 +72,7 @@ Example: watch -n 2 show_affinity all
 #define MAX_CORE		(2048)	// The maximum number of cores on current computer.
 #define LEN_AFFINITY_BUFF	(MAX_CORE*64)	// The maximum length of the buffer to hold affinity information
 #define BUFF_SIZE	(MAX_CORE * 256)	// 256 bytes should be more than enough for one line record. BUFF_SIZE defines the size of the buffer for thread binding affinity info 
-#define SIZE_STAT			(256)	// The number of bytes we read from "/proc/%tid/stat"
+#define SIZE_STAT		(256)	// The number of bytes we read from "/proc/%tid/stat"
 
 void Enumerate_All_Processes(void);	// Enumerate_All_Processes() exhaustively enumerates all processes
 int Is_Thread_Running(const char szName[]);	// Is_Thread_Running() queries whether a thread is running or not with file "/proc/%tid/stat". 
