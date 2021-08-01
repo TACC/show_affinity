@@ -8,7 +8,7 @@ To compile,<br>
 To run the command, <br>
 `./show_affinity [all]`
 
-Without any parameter, show_affinity will only show the results of processes/threads of current user that keep cpu busy.
+Without any parameter, show_affinity will only show the results of processes/threads of current user that have running statuses.
 
 With "all" as a parameter, show_affinity show the results of all processes/threads of current user. 
 <br>

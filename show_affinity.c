@@ -47,8 +47,8 @@ To run the command,
 ./show_affinity [all]
 	
 Without any parameter, show_affinity will only show the results of the processes/
-threads of current user that keep cpu busy. With "all" as a parameter, show_affinity 
-show the results of all processes/threads of current user.
+threads of current user that have statuses of running. With "all" as a parameter, 
+show_affinity show the results of all processes/threads of current user.
 	  
 You can run show_affinity with watch if you want to constantly monitor the binding 
 affinities of running processes. 
@@ -100,7 +100,7 @@ char *cpulist_create(char *str, const size_t str_len, const cpu_set_t *set, cons
 
 int main(int argc, char *argv[])
 {
-  // The flag to show all processes of current user or only shows those keeping CPU busy. 
+  // The flag to show all processes of current user or only shows those have running statuses. 
   int show_all = 0;
   
   if ( argc == 2 )
