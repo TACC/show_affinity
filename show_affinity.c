@@ -41,7 +41,7 @@ helps users to check whether processes/threads are bound on cores correctly. If
 not, one might observe performance issue due to improper binding. 
 
 To compile,
-gcc -Wall -o show_affinity show_affinity.c
+gcc -Wall -Wextra -o show_affinity show_affinity.c
   
 To run the command, 
 ./show_affinity [all]
@@ -134,7 +134,7 @@ void enumerate_all_processes(int show_all)
 	int is_main_thread;
 	
 	// uid of current user. 
-	int my_uid;
+	unsigned int my_uid;
 	
 	// pid of show_affinity itself. 
 	int my_pid;
@@ -325,11 +325,12 @@ int is_thread_running(const int tid)
 
 char *cpulist_create(char *str, const size_t str_len, const cpu_set_t *set, const size_t setsize)
 {
-	size_t i, j, block_size, left_bytes = str_len, written_bytes;
+	size_t i, j, block_size, left_bytes = str_len;
 	// Each byte has 8 bits. 
 	size_t max_len_set = 8 * (setsize);
 	char *ptr = str;
 	int entry_made = 0;
+	int written_bytes;
 	
 	for ( i = 0; i < max_len_set; i++ ) {
 		if ( CPU_ISSET_S(i, setsize, set) ) {
