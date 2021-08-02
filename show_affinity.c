@@ -83,13 +83,13 @@ Example: watch -n 2 show_affinity all
 #define SIZE_STAT		(256)
 
 // Exhaustively enumerates all processes. 
-void enumerate_all_processes(int show_all);
+void enumerate_all_processes(const int show_all);
 
 // Queries whether a thread is running or not with file "/proc/%tid/stat". 
 int is_thread_running(const int tid);
 
 // Queries and prints the binding affinity for a given thread. 
-int query_task_CPUSet(const int tid, int is_main_thread, const char msg[]);
+int query_task_CPUSet(const int tid, const int is_main_thread, const char msg[]);
 
 // Extracts the executable file name for a given process from "/proc/%pid/stat". 
 int extract_exec_name(const int pid, char exec_name[], const int max_str_len);
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
  *   void
  */
 
-void enumerate_all_processes(int show_all)
+void enumerate_all_processes(const int show_all)
 {
 	DIR *dir_root, *dir_proc;
 	struct dirent *proc_entry, *thread_entry;
@@ -251,7 +251,7 @@ void enumerate_all_processes(int show_all)
  *   0:success; other:failed
  */
 
-int query_task_CPUSet(const int tid, int is_main_thread, const char msg[])
+int query_task_CPUSet(const int tid, const int is_main_thread, const char msg[])
 {
 	char buff_affinity[LEN_AFFINITY_BUFF];
 	cpu_set_t my_set;
