@@ -287,17 +287,17 @@ int is_thread_running(const int tid)
 	int pid, ppid, items_read;
 	char buff[SIZE_STAT];
 	char path[512], running_status[512], exe_name[512];
-	FILE *fIn;
+	FILE *fp;
 
 	snprintf(path, sizeof(path), "/proc/%d/stat", tid);
 	
-	fIn = fopen(path, "r");
-	if ( fIn == NULL )	{
+	fp = fopen(path, "r");
+	if ( fp == NULL )	{
 		printf("Warning: Error to open file %s\n", path);
 		return 0;
 	}
-	fread(buff, 1, SIZE_STAT, fIn);
-	fclose(fIn);
+	fread(buff, 1, SIZE_STAT, fp);
+	fclose(fp);
 	
 	running_status[0] = 0;
 
